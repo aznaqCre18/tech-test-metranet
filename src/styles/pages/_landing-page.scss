@@ -1,0 +1,11 @@
+.landing-container {
+    max-width: 1064px;
+    margin: auto;
+    
+    .card-list-section {
+        padding: 16px 24px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+}

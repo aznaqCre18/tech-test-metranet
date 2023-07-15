@@ -1,8 +1,6 @@
 // poppins form google font
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
-// components
-@import './components/landing-page';
 
 * {
     margin: 0;
@@ -10,3 +8,14 @@
     box-sizing: border-box;
     font-family: Poppins;
 }
+
+// utils
+@import './colors-element';
+
+// pages
+@import './pages/landing-page';
+
+// components
+@import './components/header';
+@import './components/pokemon-card';
+@import './components/flag-element';

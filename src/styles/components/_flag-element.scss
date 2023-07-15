@@ -1,0 +1,14 @@
+.flag-wrapper {
+    width: max-content;
+    border-radius: 32px;
+    padding: 4px 16px;
+    background-color: rgba(127, 255, 212, 0.665);
+    margin-bottom: 6px;
+    
+    .flag-name {
+        font-size: 14px;
+        text-transform: capitalize;
+        color: white;
+        opacity: 1;
+    }
+}

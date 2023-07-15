@@ -1,0 +1,63 @@
+.pokemon-card-container {
+    width: 320px;
+    height: 240px;
+    border-radius: 12px;
+    padding: 12px 20px;
+    position: relative;
+
+    .number-id {
+        font-size: 1.5rem;
+        text-align: right;
+        font-weight: 700;
+        color: rgba(187, 247, 208, 0.813);
+    }
+
+    .main-section {
+        display: flex;
+
+        .info {
+            .pokemon-name {
+                font-size: 20px;
+                font-weight: 700;
+                color: white;
+                text-transform: capitalize;
+                margin-bottom: 16px;
+            }
+        }
+
+        .img-pokemon {
+            z-index: 10;
+
+            img {
+                width: 210px;
+                height: 210px;
+            }
+        }
+    }
+
+    .decor {
+        width: 256px;
+        position: absolute;
+        top: 10px;
+        right: -32px;
+    }
+
+    &.normal { background-color: $normal; }
+    &.fighting { background-color: $fighting; }
+    &.flying { background-color: $flying; }
+    &.poison { background-color: $poison; }
+    &.ground { background-color: $ground; }
+    &.rock { background-color: $rock; }
+    &.bug { background-color: $bug; }
+    &.ghost { background-color: $ghost; }
+    &.steel { background-color: $steel; }
+    &.fire { background-color: $fire; }
+    &.water { background-color: $water; }
+    &.grass { background-color: $grass; }
+    &.electric { background-color: $electric; }
+    &.psychic { background-color: $psychic; }
+    &.ice { background-color: $ice; }
+    &.dragon { background-color: $dragon; }
+    &.dark { background-color: $dark; }
+    &.fairy { background-color: $fairy; }
+}
