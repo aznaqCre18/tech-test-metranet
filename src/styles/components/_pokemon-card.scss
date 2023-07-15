@@ -16,6 +16,7 @@
         display: flex;
 
         .info {
+            width: 132px;
             .pokemon-name {
                 font-size: 20px;
                 font-weight: 700;
@@ -29,8 +30,8 @@
             z-index: 10;
 
             img {
-                width: 210px;
-                height: 210px;
+                width: 180px;
+                height: 180px;
             }
         }
     }
