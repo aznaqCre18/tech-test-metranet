@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import  Header from "../../components/Header";
@@ -12,35 +12,47 @@ type listPokemon = {
   url: string,
 }
 
+type pokemonList = {
+  next: string,
+  results: listPokemon[]
+}
+
+type dataListPokemon = {
+  data: pokemonList,
+  isError: boolean,
+  isLoading: boolean,
+  error: object
+}
+
 export default function LandingPage() {
-  const [listPokemon, setListPokemon] = useState<listPokemon[]>([]);
-  const [urlGetList, setUrlGetList] = useState<string>('');
+  const [listPokemon, setListPokemon] = useState<listPokemon[] | undefined>([]);
+  const [urlGetList, setUrlGetList] = useState<string | undefined>('');
   const [hasMore, setHasMore] = useState(true);
   
-  const getFirstPokemonList = useQuery(['getFirstListPokemon'], getFirsrListPokemon);
+  const { data, isError, isLoading, error }: UseQueryResult<pokemonList, Error> = useQuery(['getFirstListPokemon'], getFirsrListPokemon);
   
   useEffect(() => {
-    setUrlGetList(getFirstPokemonList?.data?.next);
-    setListPokemon(getFirstPokemonList?.data?.results);
-  }, [getFirstPokemonList.data])
+    setUrlGetList(data?.next);
+    setListPokemon(data?.results);
+  }, [data])
 
-  if (getFirstPokemonList.isLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (getFirstPokemonList.isError) {
-    return <div>Error: {getFirstPokemonList.error.message}</div>;
+  if (isError) {
+    return <div>Error: {error.message}</div>;
   }
 
   const fetchMoreData = () => {
-    setTimeout(async () => {
-      const res = await getNextPokemonList(urlGetList);
-      const mergedArray = listPokemon.concat(res.results);
+    setTimeout(async (): Promise<void> => {
+      const res: pokemonList = await getNextPokemonList(urlGetList);
+      const mergedArray = listPokemon?.concat(res.results);
       
       setListPokemon(mergedArray);
       setUrlGetList(res.next);
 
-      if (!res.next) {
+      if (!res?.next) {
         setHasMore(false);
       }
     }, 1000);

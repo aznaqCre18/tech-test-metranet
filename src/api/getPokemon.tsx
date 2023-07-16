@@ -1,6 +1,16 @@
 import { POKEDEX_BASE_URL } from "../configs/services";
 import fetch from "../utils/fetch"
 
+type listPokemon = {
+    name: string,
+    url: string,
+}
+
+type pokemonList = {
+    next: string,
+    results: listPokemon[]
+}
+
 export const getFirsrListPokemon = async () => {
     const options = {
         method: 'GET',
@@ -21,12 +31,12 @@ export const getDetailPokemon = async (url: string) => {
     return res;
 }
 
-export const getNextPokemonList = async (url: string) => {
+export const getNextPokemonList = async (url: string | undefined) => {
     const options = {
         method: 'GET',
         url
     }
 
-    const res = await fetch(options);
+    const res: pokemonList = await fetch(options) as pokemonList;
     return res;
 }
