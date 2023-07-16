@@ -55,7 +55,7 @@ export default function LandingPage() {
   }
   
   const handleClickFavorit = async (data: []) => {
-    let tempArray = favoriteSelected;
+    let tempArray = getFavoritData();
     const existingIndex = tempArray.findIndex((item) => item.id === data.id);
 
     if (existingIndex === -1) {
@@ -77,6 +77,13 @@ export default function LandingPage() {
     console.log(getDataFavorit.data, "<<< SP DATA");
   }, [getDataFavorit.data])
 
+  const commonIds = listPokemon?.reduce((result, item) => {
+    if (getDataFavorit.data.find((obj) => obj.name === item.name)) {
+      result.push(item.name)
+    }
+    return result;
+  }, [])
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -84,6 +91,9 @@ export default function LandingPage() {
   if (isError) {
     return <div>Error: {error.message}</div>;
   }
+
+  console.log(commonIds, "<<< COMS");
+  
 
   return (
     <div className="landing-container">
@@ -98,7 +108,7 @@ export default function LandingPage() {
           {
             listPokemon?.map((data, idx) => {
               return (
-                <PokemonCard element="grass" name={data?.name} url={data?.url} key={idx} handleFavorit={handleClickFavorit} />
+                <PokemonCard element="grass" name={data?.name} url={data?.url} key={idx} handleFavorit={handleClickFavorit} isFavorit={commonIds?.includes(data?.name) ? true : false} />
               )
             })
           }

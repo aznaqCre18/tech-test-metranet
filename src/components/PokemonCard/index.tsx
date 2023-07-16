@@ -16,9 +16,10 @@ type DetailPokemonType = {
   id: string
   sprites: { other: { 'official-artwork': { front_shiny: string } } }
   name: string
+  isFavorit: boolean
 }
 
-export default function PokemonCard({ name, url, handleFavorit }: PokemonCardProps) {
+export default function PokemonCard({ name, url, handleFavorit, isFavorit }: PokemonCardProps) {
   const { data }: UseQueryResult<DetailPokemonType> = useQuery(['detail-pokemon', url], () => getDetailPokemon(url));
   const navigate = useNavigate();
 
@@ -50,7 +51,13 @@ export default function PokemonCard({ name, url, handleFavorit }: PokemonCardPro
         <img className="decor" src={icons.IC_POKEDEX} alt="icon-decor" />
       </div>
       <div onClick={() => handleFavorit(data)} className="fav-btn">
-        <img className="fav-ic" src={icons.IC_LOVE_OUTLINE} alt="love-outline" />
+        {
+          isFavorit ? (
+            <img className="fav-ic" src={icons.IC_LOVE_FULLFILLED} alt="love-outline" />
+          ) : (
+            <img className="fav-ic" src={icons.IC_LOVE_OUTLINE} alt="love-outline" />
+          )
+        }
       </div>
     </div>
   )
