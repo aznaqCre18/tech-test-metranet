@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import  Header from "../../components/Header";
 import PokemonCard from "../../components/PokemonCard";
 import { getFirsrListPokemon, getNextPokemonList } from '../../api/getPokemon';
 import LoadingIcon from '../../components/LoadingIcon';
-import { saveFavoritData } from '../../utils/handleFavoritData';
+import { getFavoritData, saveFavoritData } from '../../utils/handleFavoritData';
 
 type listPokemon = {
   name: string,
@@ -23,8 +23,10 @@ export default function LandingPage() {
   const [urlGetList, setUrlGetList] = useState<string | undefined>('');
   const [hasMore, setHasMore] = useState(true);
   const [favoriteSelected, setFavoriteSelected] = useState([]);
+  const queryClient = useQueryClient();
   
   const { data, isError, isLoading, error }: UseQueryResult<pokemonList, Error> = useQuery(['getFirstListPokemon'], getFirsrListPokemon);
+  const getDataFavorit = useQuery(['data-favorit'], getFavoritData);
 
   const fetchMoreData = () => {
     setTimeout(async (): Promise<void> => {
@@ -39,8 +41,20 @@ export default function LandingPage() {
       }
     }, 1000);
   }
+
+  const postDataFavoritMutation = useMutation((newData) => {
+    saveFavoritData(newData);
+  }, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('data-favorit');
+    }
+  });
+
+  const handleExecuteMutationFavorit = async (newDataFav) => {
+    postDataFavoritMutation.mutate(newDataFav);
+  }
   
-  const handleClickFavorit = (data: []) => {
+  const handleClickFavorit = async (data: []) => {
     let tempArray = favoriteSelected;
     const existingIndex = tempArray.findIndex((item) => item.id === data.id);
 
@@ -51,18 +65,17 @@ export default function LandingPage() {
     }
     
     setFavoriteSelected(tempArray);
+    await handleExecuteMutationFavorit(tempArray);
   }
-
-  useEffect(() => {
-    console.log(favoriteSelected, 'JALAN');
-    saveFavoritData(favoriteSelected as []);
-  }, [favoriteSelected])
-  
   
   useEffect(() => {
     setUrlGetList(data?.next);
     setListPokemon(data?.results);
   }, [data])
+
+  useEffect(() => {
+    console.log(getDataFavorit.data, "<<< SP DATA");
+  }, [getDataFavorit.data])
 
   if (isLoading) {
     return <div>Loading...</div>;
