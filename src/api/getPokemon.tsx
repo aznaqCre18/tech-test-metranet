@@ -1,4 +1,4 @@
-import { POKEDEX_BASE_URL } from "../configs/services"
+import { POKEDEX_BASE_URL } from "../configs/services";
 import fetch from "../utils/fetch"
 
 export const getFirsrListPokemon = async () => {
@@ -12,6 +12,16 @@ export const getFirsrListPokemon = async () => {
 }
 
 export const getDetailPokemon = async (url: string) => {
+    const options = {
+        method: 'GET',
+        url
+    }
+
+    const res = await fetch(options);
+    return res;
+}
+
+export const getNextPokemonList = async (url: string) => {
     const options = {
         method: 'GET',
         url
