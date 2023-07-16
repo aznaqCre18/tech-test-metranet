@@ -1,4 +1,4 @@
-import { UseQueryResult, useQuery } from "@tanstack/react-query";
+import { UseQueryResult, useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import FlagElement from "../../components/FlagElement";
 import Header from "../../components/Header";
 import { icons } from "../../configs";
@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getDetailPokemonPage, getDetailSpecies } from "../../api/getPokemon";
 import LoadingIcon from "../../components/LoadingIcon";
 import { Progress } from "antd";
+import { getFavoritData, saveFavoritData } from "../../utils/handleFavoritData";
 
 type flavorType = {
   language: { name: string }
@@ -31,11 +32,17 @@ type typePokemon = {
   type: { name: string }
 }
 
+type paramsTypes = {
+  name?: string
+}
+
 export default function DetailPokemon() {
-  const { name } = useParams();
+  const { name }: paramsTypes = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { data, isLoading }: UseQueryResult<dataSpeciesType, Error> = useQuery(['detail-pokemon', name], () => getDetailPokemonPage(name));
   const dataSpecies: UseQueryResult<dataSpeciesType> = useQuery(['species-pokemon', name], () => getDetailSpecies(name));
+  const getDataFavorit: UseQueryResult<[], unknown> = useQuery(['data-favorit'], getFavoritData);
 
   const renderBio = () => {
     let desc = '';
@@ -48,6 +55,31 @@ export default function DetailPokemon() {
     })
 
     return desc;
+  }
+
+  const postDataFavoritMutation = useMutation((newData) => {
+    saveFavoritData(newData);
+  }, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries('data-favorit');
+    }
+  });
+
+  const handleExecuteMutationFavorit = (newDataFav: void) => {
+    postDataFavoritMutation.mutate(newDataFav);
+  }
+  
+  const handleClickFavorit = (data: { id: string }) => {
+    let tempArray: { id: string }[] = getFavoritData();
+    const existingIndex = tempArray.findIndex((item: { id: string }) => item.id === data.id);
+
+    if (existingIndex === -1) {
+      tempArray = [...tempArray, data];
+    } else {
+      tempArray = tempArray.filter((i: { id: string }) => i.id !== data.id);
+    }
+    
+    handleExecuteMutationFavorit(tempArray);
   }
       
   return (
@@ -62,8 +94,14 @@ export default function DetailPokemon() {
               <div onClick={() => navigate('/')} className="back-btn">
                 <img src={icons.IC_BACK} alt="ic-back" />
               </div>
-              <div className="fav-btn">
-                <img src={icons.IC_LOVE_OUTLINE} alt="ic-fav" />
+              <div onClick={() => handleClickFavorit(data)} className="fav-btn">
+                {
+                  getDataFavorit.data?.some(i => i.name === data?.name) ? (
+                    <img src={icons.IC_LOVE_FULLFILLED} alt="ic-fav" />
+                    ) : (
+                    <img src={icons.IC_LOVE_OUTLINE} alt="ic-fav" />
+                  )
+                }
               </div>
             </div>
             <div className="main-info-section">

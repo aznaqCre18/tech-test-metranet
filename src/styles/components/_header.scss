@@ -1,7 +1,22 @@
 .header-container {
     padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 42px;
 
     h3 {
         font-size: 28px;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+        transition: .2s ease-in-out;
+        display: inline-block;
+        margin-right: 20px;
+
+        &:hover {
+            opacity: .5;
+        }
     }
 }

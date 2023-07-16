@@ -8,7 +8,8 @@ type PokemonCardProps = {
   element: string,
   name: string,
   url: string
-  handleFavorit: React.MouseEventHandler
+  handleFavorit: React.MouseEventHandler<HTMLDivElement>
+  isFavorit: boolean
 }
 
 type DetailPokemonType = {
@@ -16,7 +17,7 @@ type DetailPokemonType = {
   id: string
   sprites: { other: { 'official-artwork': { front_shiny: string } } }
   name: string
-  isFavorit: boolean
+  data: { id: string }
 }
 
 export default function PokemonCard({ name, url, handleFavorit, isFavorit }: PokemonCardProps) {

@@ -22,11 +22,10 @@ export default function LandingPage() {
   const [listPokemon, setListPokemon] = useState<listPokemon[] | undefined>([]);
   const [urlGetList, setUrlGetList] = useState<string | undefined>('');
   const [hasMore, setHasMore] = useState(true);
-  const [favoriteSelected, setFavoriteSelected] = useState([]);
   const queryClient = useQueryClient();
   
   const { data, isError, isLoading, error }: UseQueryResult<pokemonList, Error> = useQuery(['getFirstListPokemon'], getFirsrListPokemon);
-  const getDataFavorit = useQuery(['data-favorit'], getFavoritData);
+  const getDataFavorit: UseQueryResult<[], unknown> = useQuery(['data-favorit'], getFavoritData);
 
   const fetchMoreData = () => {
     setTimeout(async (): Promise<void> => {
@@ -45,27 +44,26 @@ export default function LandingPage() {
   const postDataFavoritMutation = useMutation((newData) => {
     saveFavoritData(newData);
   }, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('data-favorit');
+    onSuccess: async () => {
+      await queryClient.invalidateQueries('data-favorit');
     }
   });
 
-  const handleExecuteMutationFavorit = async (newDataFav) => {
+  const handleExecuteMutationFavorit = (newDataFav: void) => {
     postDataFavoritMutation.mutate(newDataFav);
   }
   
-  const handleClickFavorit = async (data: []) => {
-    let tempArray = getFavoritData();
-    const existingIndex = tempArray.findIndex((item) => item.id === data.id);
+  const handleClickFavorit = (data: { id: string }) => {
+    let tempArray: { id: string }[] = getFavoritData();
+    const existingIndex = tempArray.findIndex((item: { id: string }) => item.id === data.id);
 
     if (existingIndex === -1) {
       tempArray = [...tempArray, data];
     } else {
-      tempArray = tempArray.filter((i) => i.id !== data.id);
+      tempArray = tempArray.filter((i: { id: string }) => i.id !== data.id);
     }
     
-    setFavoriteSelected(tempArray);
-    await handleExecuteMutationFavorit(tempArray);
+    handleExecuteMutationFavorit(tempArray);
   }
   
   useEffect(() => {
@@ -77,8 +75,8 @@ export default function LandingPage() {
     console.log(getDataFavorit.data, "<<< SP DATA");
   }, [getDataFavorit.data])
 
-  const commonIds = listPokemon?.reduce((result, item) => {
-    if (getDataFavorit.data.find((obj) => obj.name === item.name)) {
+  const commonIds = listPokemon?.reduce((result, item: { name: string }) => {
+    if (getDataFavorit.data.find((obj: { name: string }) => obj.name === item.name)) {
       result.push(item.name)
     }
     return result;

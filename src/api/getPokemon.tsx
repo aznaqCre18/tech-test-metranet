@@ -40,20 +40,20 @@ export const getNextPokemonList = async (url: string | undefined) => {
     return res;
 }
 
-export const getDetailPokemonPage = async (name: string) => {
+export const getDetailPokemonPage = async (name: string | undefined) => {
     const options = {
         method: 'GET',
-        url: `${POKEDEX_BASE_URL}/pokemon/${name}`
+        url: `${POKEDEX_BASE_URL}/pokemon/${name ?? ''}`
     }
 
     const res = await fetch(options);
     return res;
 }
 
-export const getDetailSpecies = async (name: string) => {
+export const getDetailSpecies = async (name?: string) => {
     const options = {
         method: 'GET',
-        url: `${POKEDEX_BASE_URL}/pokemon-species/${name}`
+        url: `${POKEDEX_BASE_URL}/pokemon-species/${name ?? ''}`
     }
 
     const res = await fetch(options);

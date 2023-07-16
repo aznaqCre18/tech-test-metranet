@@ -3,7 +3,7 @@ export function saveFavoritData(data: []) {
     localStorage.setItem('favorit-pokemon', JSON.stringify(data));
 }
 
-export function getFavoritData() {
+export function getFavoritData(): [] {
     const favData = localStorage.getItem('favorit-pokemon');
     return favData ? JSON.parse(favData) : [];
 }
