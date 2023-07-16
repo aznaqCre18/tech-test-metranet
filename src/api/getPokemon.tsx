@@ -17,7 +17,6 @@ export const getFirsrListPokemon = async () => {
         url: `${POKEDEX_BASE_URL}/pokemon?limit=18`
     }
     const res = await fetch(options);
-    console.log(res);
     return res;
 }
 

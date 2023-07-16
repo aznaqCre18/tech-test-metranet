@@ -17,13 +17,6 @@ type pokemonList = {
   results: listPokemon[]
 }
 
-type dataListPokemon = {
-  data: pokemonList,
-  isError: boolean,
-  isLoading: boolean,
-  error: object
-}
-
 export default function LandingPage() {
   const [listPokemon, setListPokemon] = useState<listPokemon[] | undefined>([]);
   const [urlGetList, setUrlGetList] = useState<string | undefined>('');
@@ -57,8 +50,6 @@ export default function LandingPage() {
       }
     }, 1000);
   }
-
-  console.log(listPokemon?.length, "AISHGDASD");
   
 
   return (
