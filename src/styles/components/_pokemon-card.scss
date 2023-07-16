@@ -4,12 +4,24 @@
     border-radius: 12px;
     padding: 12px 20px;
     position: relative;
+    text-decoration: none;
+
+    &:hover {
+        cursor: pointer;
+        .main-section {
+            .img-pokemon {
+                transition: all .3s ease-in-out;
+                scale: 1.1;
+            }
+        }
+    }
 
     .number-id {
         font-size: 1.5rem;
         text-align: right;
         font-weight: 700;
         color: rgba(187, 247, 208, 0.813);
+        text-decoration: unset !important;
     }
 
     .main-section {

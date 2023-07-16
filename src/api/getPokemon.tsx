@@ -39,3 +39,13 @@ export const getNextPokemonList = async (url: string | undefined) => {
     const res: pokemonList = await fetch(options) as pokemonList;
     return res;
 }
+
+export const getDetailPokemonPage = async (name) => {
+    const options = {
+        method: 'GET',
+        url: `${POKEDEX_BASE_URL}/pokemon/${name}`
+    }
+
+    const res = await fetch(options);
+    return res;
+}

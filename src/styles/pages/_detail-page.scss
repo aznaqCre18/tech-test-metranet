@@ -1,0 +1,165 @@
+.detail-container {
+    max-width: 1064px;
+    margin: auto;
+
+    .main-wrapper {
+        padding: 24px 46px;
+        position: relative;
+
+        .decoration {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            bottom: -150px;
+            left: -150px;
+        }
+
+        .action-btn-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 36px;
+
+            .back-btn {
+                width: 46px;
+                height: 46px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 100px;
+                transition: .2s ease-in-out;
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: #ffffff41;
+                }
+            }
+        }
+
+        .main-info-section {
+            z-index: 10;
+            .std-info {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .name-ele {
+                    .pokemon-name {
+                        font-size: 42px;
+                        font-weight: 600;
+                        color: #fff;
+                        text-transform: capitalize;
+                    }
+
+                    .flag-element {
+                        display: flex;
+                        gap: 10px;
+                    }
+                }
+
+                .id-pokemon {
+                    p {
+                        font-size: 28px;
+                        font-weight: 700;
+                        color: #fff;
+                    }
+                }
+            }
+
+            .bottom-info {
+                display: flex;
+                gap: 24px;
+
+                .img-pokemon {
+                    position: relative;
+                    z-index: 9999;
+                }
+
+                .basic-info {
+                    background-color: #fff;
+                    padding: 20px 32px;
+                    border-radius: 10px;
+
+                    .pokemon-bio {
+                        margin-bottom: 16px;
+                    }
+
+                    .basic-ab {
+                        display: flex;
+                        gap: 70px;
+                        .basic {
+                            margin-bottom: 20px;
+    
+                            .title {
+                                margin-bottom: 6px;
+                            }
+                            .hw {
+                                display: flex;
+                                gap: 0px;
+    
+                                .label {
+                                    width: 80px;
+                                }
+                            }
+                        }
+    
+                        .abilities {
+                            .title {
+                                margin-bottom: 6px;
+                            }
+    
+                            .detail-ab {
+    
+                                .title-sm {
+                                    font-size: 16px;
+                                    text-transform: capitalize;
+                                }
+                                .desc {
+                                    font-size: 14px;
+                                }
+                            }
+                        }
+                    }
+
+                    .stat-section {
+                        .stat-item-wrapper {
+                            .title-stat {
+                                display: flex;
+                                gap: 4px;
+                                .stat-value {
+                                    font-weight: 600;
+                                }
+                                .stat-name {
+                                    text-transform: capitalize;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        .detail-section {
+
+        }
+
+        &.normal { background-color: $normal; }
+        &.fighting { background-color: $fighting; }
+        &.flying { background-color: $flying; }
+        &.poison { background-color: $poison; }
+        &.ground { background-color: $ground; }
+        &.rock { background-color: $rock; }
+        &.bug { background-color: $bug; }
+        &.ghost { background-color: $ghost; }
+        &.steel { background-color: $steel; }
+        &.fire { background-color: $fire; }
+        &.water { background-color: $water; }
+        &.grass { background-color: $grass; }
+        &.electric { background-color: $electric; }
+        &.psychic { background-color: $psychic; }
+        &.ice { background-color: $ice; }
+        &.dragon { background-color: $dragon; }
+        &.dark { background-color: $dark; }
+        &.fairy { background-color: $fairy; }
+    }
+}
