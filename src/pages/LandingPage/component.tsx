@@ -6,6 +6,7 @@ import  Header from "../../components/Header";
 import PokemonCard from "../../components/PokemonCard";
 import { getFirsrListPokemon, getNextPokemonList } from '../../api/getPokemon';
 import LoadingIcon from '../../components/LoadingIcon';
+import { saveFavoritData } from '../../utils/handleFavoritData';
 
 type listPokemon = {
   name: string,
@@ -21,21 +22,9 @@ export default function LandingPage() {
   const [listPokemon, setListPokemon] = useState<listPokemon[] | undefined>([]);
   const [urlGetList, setUrlGetList] = useState<string | undefined>('');
   const [hasMore, setHasMore] = useState(true);
+  const [favoriteSelected, setFavoriteSelected] = useState([]);
   
   const { data, isError, isLoading, error }: UseQueryResult<pokemonList, Error> = useQuery(['getFirstListPokemon'], getFirsrListPokemon);
-  
-  useEffect(() => {
-    setUrlGetList(data?.next);
-    setListPokemon(data?.results);
-  }, [data])
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error: {error.message}</div>;
-  }
 
   const fetchMoreData = () => {
     setTimeout(async (): Promise<void> => {
@@ -51,6 +40,37 @@ export default function LandingPage() {
     }, 1000);
   }
   
+  const handleClickFavorit = (data: []) => {
+    let tempArray = favoriteSelected;
+    const existingIndex = tempArray.findIndex((item) => item.id === data.id);
+
+    if (existingIndex === -1) {
+      tempArray = [...tempArray, data];
+    } else {
+      tempArray = tempArray.filter((i) => i.id !== data.id);
+    }
+    
+    setFavoriteSelected(tempArray);
+  }
+
+  useEffect(() => {
+    console.log(favoriteSelected, 'JALAN');
+    saveFavoritData(favoriteSelected as []);
+  }, [favoriteSelected])
+  
+  
+  useEffect(() => {
+    setUrlGetList(data?.next);
+    setListPokemon(data?.results);
+  }, [data])
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div className="landing-container">
@@ -65,7 +85,7 @@ export default function LandingPage() {
           {
             listPokemon?.map((data, idx) => {
               return (
-                <PokemonCard element="grass" name={data?.name} url={data?.url} key={idx} />
+                <PokemonCard element="grass" name={data?.name} url={data?.url} key={idx} handleFavorit={handleClickFavorit} />
               )
             })
           }

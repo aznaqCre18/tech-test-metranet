@@ -79,9 +79,11 @@
                     background-color: #fff;
                     padding: 20px 32px;
                     border-radius: 10px;
+                    min-width: 480px;
 
                     .pokemon-bio {
                         margin-bottom: 16px;
+                        word-break: break-all;
                     }
 
                     .basic-ab {

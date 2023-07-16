@@ -8,6 +8,7 @@ type PokemonCardProps = {
   element: string,
   name: string,
   url: string
+  handleFavorit: React.MouseEventHandler
 }
 
 type DetailPokemonType = {
@@ -17,7 +18,7 @@ type DetailPokemonType = {
   name: string
 }
 
-export default function PokemonCard({ name, url }: PokemonCardProps) {
+export default function PokemonCard({ name, url, handleFavorit }: PokemonCardProps) {
   const { data }: UseQueryResult<DetailPokemonType> = useQuery(['detail-pokemon', url], () => getDetailPokemon(url));
   const navigate = useNavigate();
 
@@ -28,24 +29,29 @@ export default function PokemonCard({ name, url }: PokemonCardProps) {
   }
 
   return (
-    <div onClick={() => handleRedirectDetail(data?.name ?? "")} className={`pokemon-card-container ${data?.types[0]?.type.name ?? ''}`}>
-      <p className="number-id">#{data?.id}</p>
-      <div className="main-section">
-        <div className="info">
-          <p className="pokemon-name">{name}</p>
-          {
-            data?.types.map(type => {
-              return (
-                <FlagElement name={type?.type?.name} />
-              )
-            })
-          }
+    <div className="upper-container">
+      <div onClick={() => handleRedirectDetail(data?.name ?? "")} className={`pokemon-card-container ${data?.types[0]?.type.name ?? ''}`}>
+        <p className="number-id">#{data?.id}</p>
+        <div className="main-section">
+          <div className="info">
+            <p className="pokemon-name">{name}</p>
+            {
+              data?.types.map(type => {
+                return (
+                  <FlagElement name={type?.type?.name} />
+                )
+              })
+            }
+          </div>
+          <div className="img-pokemon">
+            <img src={data?.sprites.other['official-artwork'].front_shiny} alt="pokemon-img" />
+          </div>
         </div>
-        <div className="img-pokemon">
-          <img src={data?.sprites.other['official-artwork'].front_shiny} alt="pokemon-img" />
-        </div>
+        <img className="decor" src={icons.IC_POKEDEX} alt="icon-decor" />
       </div>
-      <img className="decor" src={icons.IC_POKEDEX} alt="icon-decor" />
+      <div onClick={() => handleFavorit(data)} className="fav-btn">
+        <img className="fav-ic" src={icons.IC_LOVE_OUTLINE} alt="love-outline" />
+      </div>
     </div>
   )
 }

@@ -1,17 +1,55 @@
-import { useQuery } from "@tanstack/react-query";
+import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import FlagElement from "../../components/FlagElement";
 import Header from "../../components/Header";
-import { icons, images } from "../../configs";
+import { icons } from "../../configs";
 import { useNavigate, useParams } from "react-router-dom";
-import { getDetailPokemonPage } from "../../api/getPokemon";
+import { getDetailPokemonPage, getDetailSpecies } from "../../api/getPokemon";
 import LoadingIcon from "../../components/LoadingIcon";
 import { Progress } from "antd";
+
+type flavorType = {
+  language: { name: string }
+  flavor_text: string
+}
+
+type dataSpeciesType = {
+  id: string
+  flavor_text_entries: { flavor: flavorType }[]
+  name: string
+  types: typePokemon[]
+  sprites: { other: { 'official-artwork': { front_shiny: string } } }
+  abilities: { ability: { name: string } }[]
+  height: string
+  weight: string
+  stats: {
+    base_stat: number
+    stat: { name: string }
+  }[]
+}
+
+type typePokemon = {
+  type: { name: string }
+}
 
 export default function DetailPokemon() {
   const { name } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading, isError } = useQuery(['detail-pokemon', name], () => getDetailPokemonPage(name));
+  const { data, isLoading }: UseQueryResult<dataSpeciesType, Error> = useQuery(['detail-pokemon', name], () => getDetailPokemonPage(name));
+  const dataSpecies: UseQueryResult<dataSpeciesType> = useQuery(['species-pokemon', name], () => getDetailSpecies(name));
 
+  const renderBio = () => {
+    let desc = '';
+    dataSpecies?.data?.flavor_text_entries?.some((flavor: flavorType) => {
+        if(flavor.language.name === 'en') {
+              desc = flavor.flavor_text;
+              return true
+        }
+        return false
+    })
+
+    return desc;
+  }
+      
   return (
     <div className="detail-container">
       <Header />
@@ -34,9 +72,9 @@ export default function DetailPokemon() {
                   <p className="pokemon-name">{data?.name}</p>
                   <div className="flag-element">
                     {
-                      data?.types.map(type => {
+                      data?.types.map((type: typePokemon, idx: number) => {
                         return (
-                          <FlagElement name={type?.type?.name} />
+                          <FlagElement name={type?.type?.name} key={idx} />
                         )
                       })
                     }
@@ -51,14 +89,14 @@ export default function DetailPokemon() {
                   <img src={data?.sprites.other['official-artwork'].front_shiny} alt="main-image-pokemon" />
                 </div>
                 <div className="basic-info">
-                  <p className="pokemon-bio">A strange seed was planted on its back at birth.The plant sprouts and grows with this POKéMON.</p>
+                  <p className="pokemon-bio">{renderBio()}</p>
                   <div className="basic-ab">
                     <div className="abilities">
                       <h4 className="title">Abilities</h4>
                       {
-                        data?.abilities?.map((ability, idx) => {
+                        data?.abilities?.map((ability: { ability: { name: string } }, idx: number) => {
                           return (
-                            <div className="detail-ab">
+                            <div className="detail-ab" key={idx}>
                               <p className="title-sm">{ability?.ability?.name}</p>
                             </div>
                           )
@@ -81,7 +119,7 @@ export default function DetailPokemon() {
                     {
                       data?.stats?.map((dataStat, idx) => {
                         return (
-                          <div className="stat-item-wrapper">
+                          <div className="stat-item-wrapper" key={idx}>
                             <div className="title-stat">
                               <p className="stat-value">({dataStat?.base_stat})</p>
                               <p className="stat-name">{dataStat?.stat?.name}</p>
