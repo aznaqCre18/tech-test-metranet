@@ -60,7 +60,7 @@ export const getDetailSpecies = async (name?: string) => {
     return res;
 }
 
-export const getPokemonByType = async (types) => {
+export const getPokemonByType = async (types: string[]) => {
     const fetchData = async (type: string) => {
         const options = {
             method: 'GET',

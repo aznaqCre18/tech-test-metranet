@@ -1,11 +1,12 @@
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+
 import Header from "../../components/Header";
 import PokemonCard from "../../components/PokemonCard";
 import { getFavoritData } from "../../utils/handleFavoritData";
 import { POKEDEX_BASE_URL } from "../../configs/services";
 import LoadingIcon from "../../components/LoadingIcon";
 import { icons } from "../../configs";
-import { useNavigate } from "react-router-dom";
 
 type favType = {
   name: string,

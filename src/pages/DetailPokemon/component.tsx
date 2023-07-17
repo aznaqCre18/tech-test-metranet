@@ -1,11 +1,12 @@
 import { UseQueryResult, useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import { Progress } from "antd";
+
 import FlagElement from "../../components/FlagElement";
 import Header from "../../components/Header";
 import { icons } from "../../configs";
-import { useNavigate, useParams } from "react-router-dom";
 import { getDetailPokemonPage, getDetailSpecies } from "../../api/getPokemon";
 import LoadingIcon from "../../components/LoadingIcon";
-import { Progress } from "antd";
 import { getFavoritData, saveFavoritData } from "../../utils/handleFavoritData";
 
 type flavorType = {

@@ -1,8 +1,9 @@
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+
 import { icons } from "../../configs";
 import FlagElement from "../FlagElement";
 import { getDetailPokemon } from "../../api/getPokemon";
-import { useNavigate } from "react-router-dom";
 import LoadingIcon from "../LoadingIcon";
 
 type PokemonCardProps = {
