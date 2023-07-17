@@ -8,8 +8,8 @@ import { pokemonType } from "../../constants/pokemonTypes";
 import { AbstractCheckboxProps } from "antd/es/checkbox/Checkbox";
 
 type headerProps = {
-  onChange?: AbstractCheckboxProps<CheckboxChangeEvent>
-  onApply?: Function
+  onChange?: any
+  onApply?: any
   hideFilter?: boolean
 }
 

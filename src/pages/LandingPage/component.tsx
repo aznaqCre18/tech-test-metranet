@@ -23,7 +23,7 @@ type pokemonList = {
 }
 
 export default function LandingPage() {
-  const [listPokemon, setListPokemon] = useState<listPokemon | listPokemonSec | undefined>([]);
+  const [listPokemon, setListPokemon] = useState<listPokemon | listPokemonSec | any>([]);
   const [urlGetList, setUrlGetList] = useState<string | undefined>('');
   const [hasMore, setHasMore] = useState(true);
   const [typeSelected, setTypeSelected] = useState([]);
@@ -35,7 +35,7 @@ export default function LandingPage() {
 
   const fetchMoreData = () => {
     setTimeout(async (): Promise<void> => {
-      const res: pokemonList = await getNextPokemonList(urlGetList);
+      const res: any = await getNextPokemonList(urlGetList);
       const mergedArray = listPokemon?.concat(res.results);
       
       setListPokemon(mergedArray);
@@ -47,15 +47,15 @@ export default function LandingPage() {
     }, 1000);
   }
 
-  const postDataFavoritMutation = useMutation((newData) => {
+  const postDataFavoritMutation = useMutation(async (newData: any) => {
     saveFavoritData(newData);
   }, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries('data-favorit');
+      await queryClient.invalidateQueries(['data-favorit']);
     }
   });
 
-  const handleExecuteMutationFavorit = (newDataFav: void) => {
+  const handleExecuteMutationFavorit = (newDataFav: any) => {
     postDataFavoritMutation.mutate(newDataFav);
   }
   
@@ -79,17 +79,17 @@ export default function LandingPage() {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const commonIds = listPokemon?.reduce((result: string[], item: { name: string }) => {
-    if (getDataFavorit.data.find((obj: { name: string }) => obj.name === item.name)) {
+    if (getDataFavorit?.data?.find((obj: { name: string }) => obj.name === item.name)) {
       result.push(item.name)
     }
     return result;
   }, [])
 
-  const handleChangeFilterCheckbox = (e) => {
-    let tempArr = typeSelected;
+  const handleChangeFilterCheckbox = (e: any) => {
+    let tempArr: any = typeSelected;
 
     if (tempArr.includes(e.target.value)) {
-      tempArr = tempArr.filter(i => i !== e.target.value);
+      tempArr = tempArr.filter((i: string) => i !== e.target.value);
     } else {
       tempArr = [...tempArr, e.target.value];
     }
@@ -121,9 +121,9 @@ export default function LandingPage() {
       >
         <div className="card-list-section">
           {
-            listPokemon?.map((data, idx) => {
+            listPokemon?.map((data: any, idx: number) => {
               return (
-                <PokemonCard element="grass" name={data?.name || data?.pokemon?.name} url={data?.url || data?.pokemon?.url} key={idx} handleFavorit={handleClickFavorit} isFavorit={commonIds?.includes(data?.name) ? true : false} />
+                <PokemonCard name={data?.name || data?.pokemon?.name} url={data?.url || data?.pokemon?.url} key={idx} handleFavorit={handleClickFavorit} isFavorit={commonIds?.includes(data?.name) ? true : false} />
               )
             })
           }

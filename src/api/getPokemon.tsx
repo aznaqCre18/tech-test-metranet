@@ -67,8 +67,8 @@ export const getPokemonByType = async (types: string[]) => {
             url: `${POKEDEX_BASE_URL}/type/${type}`
         }
 
-        const response = await fetch(options);
-        return response.pokemon;
+        const response: any = await fetch(options);
+        return response?.pokemon;
     };
       
     const fetchAllData = async () => {

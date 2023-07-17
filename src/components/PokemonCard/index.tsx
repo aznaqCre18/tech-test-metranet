@@ -9,9 +9,9 @@ import LoadingIcon from "../LoadingIcon";
 type PokemonCardProps = {
   name: string,
   url: string
-  handleFavorit?: React.MouseEvent<Element, MouseEvent>
+  handleFavorit?: any
   isFavorit?: boolean
-  isFav: boolean
+  isFav?: boolean
 }
 
 type DetailPokemonType = {

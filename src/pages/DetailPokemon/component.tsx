@@ -59,11 +59,12 @@ export default function DetailPokemon() {
     return desc;
   }
 
-  const postDataFavoritMutation = useMutation((newData) => {
+  const postDataFavoritMutation = useMutation((newData: any): any => {
     saveFavoritData(newData);
   }, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries('data-favorit');
+      const key: any = 'data-favorit';
+      await queryClient.invalidateQueries(key);
     }
   });
 
@@ -71,9 +72,9 @@ export default function DetailPokemon() {
     postDataFavoritMutation.mutate(newDataFav);
   }
   
-  const handleClickFavorit = (data: { id: string }) => {
-    let tempArray: string[] = getFavoritData();
-    const existingIndex = tempArray.findIndex((item: { id: string }) => item.id === data.id);
+  const handleClickFavorit = (data: any) => {
+    let tempArray: any = getFavoritData();
+    const existingIndex = tempArray.findIndex((item: any) => item.id === data.id);
 
     if (existingIndex === -1) {
       tempArray = [...tempArray, data];
@@ -98,7 +99,7 @@ export default function DetailPokemon() {
               </div>
               <div onClick={() => handleClickFavorit(data)} className="fav-btn">
                 {
-                  getDataFavorit.data?.some(i => i.name === data?.name) ? (
+                  getDataFavorit.data?.some((i: {name: string}) => i.name === data?.name) ? (
                     <img src={icons.IC_LOVE_FULLFILLED} alt="ic-fav" />
                     ) : (
                     <img src={icons.IC_LOVE_OUTLINE} alt="ic-fav" />
