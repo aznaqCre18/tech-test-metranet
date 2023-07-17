@@ -28,7 +28,7 @@ export default function FavoritePokemon() {
         </div>
         <div className="card-list-section">
           {
-            data ?? data?.length > 0 ? 
+            data?.length > 0 ? 
               data?.map((datas: any, idx: number) => {
                 return (
                   <PokemonCard name={datas?.name} url={`${POKEDEX_BASE_URL}/pokemon/${datas.name}`} key={idx} isFav={true} />
