@@ -98,7 +98,11 @@ export default function LandingPage() {
   }
 
   const handleApplyFilter = () => {
-    setListPokemon(getPokemonByTypes.data);
+    if ( typeSelected.length === 0 ) {
+      setListPokemon(data?.results);
+    } else {
+      setListPokemon(getPokemonByTypes.data);
+    }
   }
   
 
