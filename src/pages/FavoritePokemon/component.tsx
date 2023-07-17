@@ -8,12 +8,8 @@ import { POKEDEX_BASE_URL } from "../../configs/services";
 import LoadingIcon from "../../components/LoadingIcon";
 import { icons } from "../../configs";
 
-type favType = {
-  name: string,
-}
-
 export default function FavoritePokemon() {
-  const { data, isLoading }: UseQueryResult<favType[], unknown> = useQuery(['data-favorit'], getFavoritData);
+  const { data, isLoading }: UseQueryResult<any> = useQuery(['data-favorit'], getFavoritData);
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -32,11 +28,14 @@ export default function FavoritePokemon() {
         </div>
         <div className="card-list-section">
           {
-            data?.map((datas, idx) => {
-              return (
-                <PokemonCard name={datas?.name} url={`${POKEDEX_BASE_URL}/pokemon/${datas.name}`} key={idx} isFav={true} />
+            data ?? data?.length > 0 ? 
+              data?.map((datas: any, idx: number) => {
+                return (
+                  <PokemonCard name={datas?.name} url={`${POKEDEX_BASE_URL}/pokemon/${datas.name}`} key={idx} isFav={true} />
+                )
+              }) : (
+                <p>You haven't added any Pokémon yet.</p>
               )
-            })
           }
         </div>
       </div>
