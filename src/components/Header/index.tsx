@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Drawer, Checkbox, Button  } from 'antd';
-import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 import { icons } from "../../configs";
 import { pokemonType } from "../../constants/pokemonTypes";
-import { AbstractCheckboxProps } from "antd/es/checkbox/Checkbox";
 
 type headerProps = {
   onChange?: any
@@ -51,7 +49,7 @@ export default function Header({ onChange, onApply, hideFilter = false }: header
             {
               pokemonType.map((type, idx) => {
                 return (
-                  <div className="item-checkbox">
+                  <div className="item-checkbox" key={idx}>
                     <Checkbox onChange={onChange} value={type.name}>{type.name}</Checkbox>
                   </div>
                 )

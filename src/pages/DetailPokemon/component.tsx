@@ -8,7 +8,6 @@ import { icons } from "../../configs";
 import { getDetailPokemonPage, getDetailSpecies } from "../../api/getPokemon";
 import LoadingIcon from "../../components/LoadingIcon";
 import { getFavoritData, saveFavoritData } from "../../utils/handleFavoritData";
-import { AxiosError } from "axios";
 
 type flavorType = {
   language: { name: string }
