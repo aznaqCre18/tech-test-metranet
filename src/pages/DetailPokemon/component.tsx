@@ -84,7 +84,7 @@ export default function DetailPokemon() {
       
   return (
     <div className="detail-container">
-      <Header />
+      <Header hideFilter />
       {
         isLoading ? (
           <LoadingIcon />

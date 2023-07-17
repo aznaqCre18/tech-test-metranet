@@ -59,3 +59,24 @@ export const getDetailSpecies = async (name?: string) => {
     const res = await fetch(options);
     return res;
 }
+
+export const getPokemonByType = async (types) => {
+    const fetchData = async (type: string) => {
+        const options = {
+            method: 'GET',
+            url: `${POKEDEX_BASE_URL}/type/${type}`
+        }
+
+        const response = await fetch(options);
+        return response.pokemon;
+    };
+      
+    const fetchAllData = async () => {
+        const promises = types.map(type => fetchData(type));
+        const allData = await Promise.all(promises);
+        return allData.flat(); // Menggabungkan data dari semua jenis menjadi satu array
+    };
+      
+    const allPokemon = await fetchAllData();
+    return allPokemon;
+}

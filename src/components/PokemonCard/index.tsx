@@ -3,13 +3,14 @@ import { icons } from "../../configs";
 import FlagElement from "../FlagElement";
 import { getDetailPokemon } from "../../api/getPokemon";
 import { useNavigate } from "react-router-dom";
+import LoadingIcon from "../LoadingIcon";
 
 type PokemonCardProps = {
-  element: string,
   name: string,
   url: string
-  handleFavorit: React.MouseEventHandler<HTMLDivElement>
-  isFavorit: boolean
+  handleFavorit?: React.MouseEvent<Element, MouseEvent>
+  isFavorit?: boolean
+  isFav: boolean
 }
 
 type DetailPokemonType = {
@@ -20,14 +21,18 @@ type DetailPokemonType = {
   data: { id: string }
 }
 
-export default function PokemonCard({ name, url, handleFavorit, isFavorit }: PokemonCardProps) {
-  const { data }: UseQueryResult<DetailPokemonType> = useQuery(['detail-pokemon', url], () => getDetailPokemon(url));
+export default function PokemonCard({ name, url, handleFavorit, isFavorit, isFav }: PokemonCardProps) {
+  const { data, isLoading }: UseQueryResult<DetailPokemonType> = useQuery(['detail-pokemon', url], () => getDetailPokemon(url));
   const navigate = useNavigate();
 
   const handleRedirectDetail = (name: string ): void => {
     if (name) {
       navigate(`/${name}`);
     }
+  }
+
+  if (isLoading) {
+    return <LoadingIcon />
   }
 
   return (
@@ -38,9 +43,9 @@ export default function PokemonCard({ name, url, handleFavorit, isFavorit }: Pok
           <div className="info">
             <p className="pokemon-name">{name}</p>
             {
-              data?.types.map(type => {
+              data?.types.map((type, idx) => {
                 return (
-                  <FlagElement name={type?.type?.name} />
+                  <FlagElement name={type?.type?.name} key={idx} />
                 )
               })
             }
@@ -51,15 +56,19 @@ export default function PokemonCard({ name, url, handleFavorit, isFavorit }: Pok
         </div>
         <img className="decor" src={icons.IC_POKEDEX} alt="icon-decor" />
       </div>
-      <div onClick={() => handleFavorit(data)} className="fav-btn">
-        {
-          isFavorit ? (
-            <img className="fav-ic" src={icons.IC_LOVE_FULLFILLED} alt="love-outline" />
-          ) : (
-            <img className="fav-ic" src={icons.IC_LOVE_OUTLINE} alt="love-outline" />
-          )
-        }
-      </div>
+      {
+        !isFav && (
+          <div onClick={() => handleFavorit(data)} className="fav-btn">
+            {
+              isFavorit ? (
+                <img className="fav-ic" src={icons.IC_LOVE_FULLFILLED} alt="love-outline" />
+              ) : (
+                <img className="fav-ic" src={icons.IC_LOVE_OUTLINE} alt="love-outline" />
+              )
+            }
+          </div>
+        )
+      }
     </div>
   )
 }

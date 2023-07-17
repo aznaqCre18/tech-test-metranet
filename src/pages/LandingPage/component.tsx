@@ -4,14 +4,18 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import  Header from "../../components/Header";
 import PokemonCard from "../../components/PokemonCard";
-import { getFirsrListPokemon, getNextPokemonList } from '../../api/getPokemon';
+import { getFirsrListPokemon, getNextPokemonList, getPokemonByType } from '../../api/getPokemon';
 import LoadingIcon from '../../components/LoadingIcon';
 import { getFavoritData, saveFavoritData } from '../../utils/handleFavoritData';
 
 type listPokemon = {
   name: string,
   url: string,
-}
+}[]
+
+type listPokemonSec = {
+  pokemon: listPokemon
+}[]
 
 type pokemonList = {
   next: string,
@@ -19,13 +23,15 @@ type pokemonList = {
 }
 
 export default function LandingPage() {
-  const [listPokemon, setListPokemon] = useState<listPokemon[] | undefined>([]);
+  const [listPokemon, setListPokemon] = useState<listPokemon | listPokemonSec | undefined>([]);
   const [urlGetList, setUrlGetList] = useState<string | undefined>('');
   const [hasMore, setHasMore] = useState(true);
+  const [typeSelected, setTypeSelected] = useState([]);
   const queryClient = useQueryClient();
   
   const { data, isError, isLoading, error }: UseQueryResult<pokemonList, Error> = useQuery(['getFirstListPokemon'], getFirsrListPokemon);
   const getDataFavorit: UseQueryResult<[], unknown> = useQuery(['data-favorit'], getFavoritData);
+  const getPokemonByTypes = useQuery(['pokemon-type', typeSelected], () => getPokemonByType(typeSelected));
 
   const fetchMoreData = () => {
     setTimeout(async (): Promise<void> => {
@@ -54,7 +60,7 @@ export default function LandingPage() {
   }
   
   const handleClickFavorit = (data: { id: string }) => {
-    let tempArray: { id: string }[] = getFavoritData();
+    let tempArray: { id: string }[] | void = getFavoritData();
     const existingIndex = tempArray.findIndex((item: { id: string }) => item.id === data.id);
 
     if (existingIndex === -1) {
@@ -71,16 +77,30 @@ export default function LandingPage() {
     setListPokemon(data?.results);
   }, [data])
 
-  useEffect(() => {
-    console.log(getDataFavorit.data, "<<< SP DATA");
-  }, [getDataFavorit.data])
-
-  const commonIds = listPokemon?.reduce((result, item: { name: string }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const commonIds = listPokemon?.reduce((result: string[], item: { name: string }) => {
     if (getDataFavorit.data.find((obj: { name: string }) => obj.name === item.name)) {
       result.push(item.name)
     }
     return result;
   }, [])
+
+  const handleChangeFilterCheckbox = (e) => {
+    let tempArr = typeSelected;
+
+    if (tempArr.includes(e.target.value)) {
+      tempArr = tempArr.filter(i => i !== e.target.value);
+    } else {
+      tempArr = [...tempArr, e.target.value];
+    }
+
+    setTypeSelected(tempArr);
+  }
+
+  const handleApplyFilter = () => {
+    setListPokemon(getPokemonByTypes.data);
+  }
+  
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -90,12 +110,9 @@ export default function LandingPage() {
     return <div>Error: {error.message}</div>;
   }
 
-  console.log(commonIds, "<<< COMS");
-  
-
   return (
     <div className="landing-container">
-      <Header />
+      <Header onChange={handleChangeFilterCheckbox} onApply={handleApplyFilter} />
       <InfiniteScroll
         dataLength={listPokemon?.length || 0}
         next={fetchMoreData}
@@ -106,7 +123,7 @@ export default function LandingPage() {
           {
             listPokemon?.map((data, idx) => {
               return (
-                <PokemonCard element="grass" name={data?.name} url={data?.url} key={idx} handleFavorit={handleClickFavorit} isFavorit={commonIds?.includes(data?.name) ? true : false} />
+                <PokemonCard element="grass" name={data?.name || data?.pokemon?.name} url={data?.url || data?.pokemon?.url} key={idx} handleFavorit={handleClickFavorit} isFavorit={commonIds?.includes(data?.name) ? true : false} />
               )
             })
           }
