@@ -1,25 +1,47 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+    /* Basic Options */
+    "target": "es2020",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "plugins": [
+      {"name": "typescript-plugin-css-modules"}
+    ],
+    /* Compiling Options */
+    "allowJs": false,
+    "removeComments": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-
-    /* Linting */
+    "noFallthroughCasesInSwitch": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "types"
+    ],
+    /* Strict Type-Checking Options */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    /* Module Resolution Options */
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    /* Advanced Options */
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "pages/**/*",
+    "server/**/*",
+    "src/**/*",
+    "types/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+  ]
 }

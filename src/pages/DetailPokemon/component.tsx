@@ -8,6 +8,7 @@ import { icons } from "../../configs";
 import { getDetailPokemonPage, getDetailSpecies } from "../../api/getPokemon";
 import LoadingIcon from "../../components/LoadingIcon";
 import { getFavoritData, saveFavoritData } from "../../utils/handleFavoritData";
+import { AxiosError } from "axios";
 
 type flavorType = {
   language: { name: string }
@@ -47,7 +48,7 @@ export default function DetailPokemon() {
 
   const renderBio = () => {
     let desc = '';
-    dataSpecies?.data?.flavor_text_entries?.some((flavor: flavorType) => {
+    dataSpecies?.data?.flavor_text_entries?.some((flavor: any) => {
         if(flavor.language.name === 'en') {
               desc = flavor.flavor_text;
               return true
@@ -66,12 +67,12 @@ export default function DetailPokemon() {
     }
   });
 
-  const handleExecuteMutationFavorit = (newDataFav: void) => {
+  const handleExecuteMutationFavorit = (newDataFav: string) => {
     postDataFavoritMutation.mutate(newDataFav);
   }
   
   const handleClickFavorit = (data: { id: string }) => {
-    let tempArray: { id: string }[] = getFavoritData();
+    let tempArray: string[] = getFavoritData();
     const existingIndex = tempArray.findIndex((item: { id: string }) => item.id === data.id);
 
     if (existingIndex === -1) {
